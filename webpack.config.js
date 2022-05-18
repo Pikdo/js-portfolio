@@ -5,6 +5,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const DotEnv = require('dotenv-webpack');
+//const {CleanWebpackPlugin} = require('clean-webpack-plugin'); A apartir de la versión 5.20 de webpack solo require un clean:true en el output
 
 // Crear módulo
 
@@ -16,8 +17,10 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'), // Punto de salida
         filename: '[name].[contenthash].js', // Nombre del archivo e incorporamos un contenthash para identificar cambios
-        assetModuleFilename:  'assets/images/[hash][ext][query]' // Nombre de los archivos assets
+        assetModuleFilename:  'assets/images/[hash][ext][query]', // Nombre de los archivos assets
+        clean:true
     },
+    mode:'production',
     resolve: {
         extensions: ['.js'], // Qué extensiones va identificar
         alias : {  // En las rutas de los archivos podemos usar alias para no escribir todas las rutas, ejemplo @utils en lugar de ../src/utils
@@ -93,6 +96,7 @@ module.exports = {
             ]
         }),*/
         new DotEnv(),
+        // new CleanWebpackPlugin() // Limpia archivos para producción, ahora en webpack5.20 se usa clean:true en el output
     ],
     optimization:{   // Optimización para minimizar
         minimize:true,

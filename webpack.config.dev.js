@@ -2,8 +2,6 @@ const path = require('path'); // Disponible en node
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const DotEnv = require('dotenv-webpack');
 
 // Crear módulo
@@ -15,9 +13,12 @@ module.exports = {
     entry: './src/index.js',  // Punto de entrada del app, index.js
     output: {
         path: path.resolve(__dirname, 'dist'), // Punto de salida
-        filename: '[name].[contenthash].js', // Nombre del archivo e incorporamos un contenthash para identificar cambios
-        assetModuleFilename:  'assets/images/[hash][ext][query]' // Nombre de los archivos assets
+        filename: '[name].js', // Nombre del archivo e incorporamos un contenthash para identificar cambios
+        assetModuleFilename:  'assets/images/[name][ext][query]', // Nombre de los archivos assets
+        clean:true
     },
+    mode: 'development',
+    watch: true, // que cada cambio se compile y se refleje
     resolve: {
         extensions: ['.js'], // Qué extensiones va identificar
         alias : {  // En las rutas de los archivos podemos usar alias para no escribir todas las rutas, ejemplo @utils en lugar de ../src/utils
@@ -52,7 +53,7 @@ module.exports = {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,  // Trabajar con fonts internas 
                 type: 'asset/resource',
                 generator: {
-                    filename: 'assets/fonts/[name].[contenthash].[ext]' // Indica donde guardar los fonts y su nombre
+                    filename: 'assets/fonts/[name].[ext]' // Indica donde guardar los fonts y su nombre
                 },
                 /*use: {
                     loader: 'url-loader',
@@ -82,7 +83,7 @@ module.exports = {
             filename: './index.html'  // Nombre del archivo de salida
         }),
         new MiniCssExtractPlugin({
-            filename: 'assets/[name].[contenthash].css' // Agregar los css en assets e incorporamos un contenthash para identificar cambios
+            filename: 'assets/[name].css' // Agregar los css en assets e incorporamos un contenthash para identificar cambios
         }),
         /*new CopyPlugin({
             patterns: [
@@ -93,12 +94,5 @@ module.exports = {
             ]
         }),*/
         new DotEnv(),
-    ],
-    optimization:{   // Optimización para minimizar
-        minimize:true,
-        minimizer:[
-            new CssMinimizerPlugin(),  // Para minimizar css
-            new TerserPlugin()         // Para minimizar javascript
-        ]
-    }
+    ]
 }
