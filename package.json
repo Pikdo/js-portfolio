@@ -43,9 +43,5 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2"
-  },
-  "dependencies": {
-    "canvas-confetti": "^1.5.1",
-    "promise": "^8.1.0"
   }
 }
